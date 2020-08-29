@@ -8,22 +8,18 @@ namespace demoApadrinhamento.Classes
 {
     class Aluno
     {
-        string nome;
-        string turno;
-        string mbti;
-        string horário;
-
-        public Aluno(string nome, string turno, string mbti, string horário)
+        public Aluno(string nome, string turno, string mbti, string horario)
         {
-            this.Nome = nome;
-            this.Turno = turno;
-            this.Mbti = mbti;
-            this.Horário = horário;
+            this.nome = nome;
+            this.turno = turno;
+            this.mbti = mbti;
+            this.horario = horario;
         }
 
-        public string Nome { get => nome; set => nome = value; }
-        public string Turno { get => turno; set => turno = value; }
-        public string Mbti { get => mbti; set => mbti = value; }
-        public string Horário { get => horário; set => horário = value; }
+        public string nome { get; set; }
+        public string turno { get; set; }
+        public string mbti { get; set; }
+        public string horario { get; set; }
+
     }
 }

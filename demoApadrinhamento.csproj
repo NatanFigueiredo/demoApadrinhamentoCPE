@@ -45,7 +45,7 @@
   <ItemGroup>
     <Compile Include="Classes\Aluno.cs" />
     <Compile Include="Classes\Padrinho.cs" />
-    <Compile Include="Classes\Resultado.cs" />
+    <Compile Include="Classes\Match.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

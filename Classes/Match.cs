@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace demoApadrinhamento.Classes
 {
-    class Resultado
+    class Match
     {
+        public Match(Aluno afilhado, Padrinho padrinho)
+        {
+            this.afilhado = afilhado;
+            this.padrinho = padrinho;
+        }
+
         public Aluno afilhado { get; set; }
+        public Padrinho padrinho { get; set; }
 
     }
 }
