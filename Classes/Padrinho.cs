@@ -14,7 +14,7 @@ namespace demoApadrinhamento.Classes
         public string horario { get; set; }
         public int maxAfilhado { get; set; }
 
-        public Padrinho(string nome, string mbti, string ocupacao, string horario)
+        public Padrinho(string nome, string mbti, string ocupacao, string horario, int maxAfilhado)
         {
             this.nome = nome;
             this.mbti = mbti;

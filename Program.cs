@@ -38,7 +38,7 @@ namespace demoApadrinhamento
                 while ((currentLine = sr.ReadLine()) != null)
                 {
                     string[] linha = currentLine.Split(';');
-                    padrinhos.AddLast(new Padrinho(linha[0], linha[1], linha[2], linha[3]));
+                    padrinhos.AddLast(new Padrinho(linha[0], linha[1], linha[2], linha[3], Convert.ToInt32(linha[4])));
                 }
                 padrinhos.RemoveFirst();
             }
@@ -55,37 +55,70 @@ namespace demoApadrinhamento
              * for(LinkedListNode<Object> node=list.First; node != null; node=node.Next){
              */
 
-            LinkedListNode<Padrinho> p = padrinhos.First;
-            while (p != null)
             {
-                int afilhadosAtuais = 0;
-                LinkedListNode<Aluno> a = alunos.First;
-                while ((a != null) & (afilhadosAtuais < p.Value.maxAfilhado))
+                LinkedListNode<Padrinho> p = padrinhos.First;
+                while (p != null)
                 {
-                    bool hasMatch = false;
-                    if (validaHorario(p.Value.horario, a.Value.horario) && p.Value.mbti.Equals(a.Value.mbti))
+                    int afilhadosAtuais = 0;
+                    LinkedListNode<Aluno> a = alunos.First;
+                    while ((a != null) & (afilhadosAtuais < p.Value.maxAfilhado))
                     {
-                        matchesMBTI.AddLast(new Match(a.Value, p.Value));
-                        hasMatch = true;
-                        afilhadosAtuais++;
+                        bool hasMatch = false;
+                        if (validaHorario(p.Value.horario, a.Value.horario) && p.Value.mbti.Equals(a.Value.mbti))
+                        {
+                            matchesMBTI.AddLast(new Match(a.Value, p.Value));
+                            hasMatch = true;
+                            afilhadosAtuais++;
+                        }
+
+                        LinkedListNode<Aluno> nextAluno = a.Next;
+                        if (hasMatch) alunos.Remove(a);
+
+                        a = nextAluno;
                     }
 
-                    LinkedListNode<Aluno> nextAluno = a.Next;
-                    if (hasMatch) alunos.Remove(a);
-
-                    a = nextAluno;
+                    LinkedListNode<Padrinho> nextPadrinho = p.Next;
+                    if (afilhadosAtuais == p.Value.maxAfilhado) padrinhos.Remove(p);
+                    p = nextPadrinho;
                 }
+            }
 
-                LinkedListNode<Padrinho> nextPadrinho = p.Next;
-                if (afilhadosAtuais == p.Value.maxAfilhado) padrinhos.Remove(p);
-                p = nextPadrinho;
+            if (alunos.Count > 0)
+            {
+                LinkedListNode<Padrinho> p = padrinhos.First;
+                while (p != null)
+                {
+                    int afilhadosAtuais = 0;
+                    LinkedListNode<Aluno> a = alunos.First;
+                    while ((a != null) & (afilhadosAtuais < p.Value.maxAfilhado))
+                    {
+                        bool hasMatch = false;
+                        if (validaHorario(p.Value.horario, a.Value.horario) )
+                        {
+                            matchesMBTI.AddLast(new Match(a.Value, p.Value));
+                            hasMatch = true;
+                            afilhadosAtuais++;
+                        }
+
+                        LinkedListNode<Aluno> nextAluno = a.Next;
+                        if (hasMatch) alunos.Remove(a);
+
+                        a = nextAluno;
+                    }
+
+                    LinkedListNode<Padrinho> nextPadrinho = p.Next;
+                    if (afilhadosAtuais == p.Value.maxAfilhado) padrinhos.Remove(p);
+                    p = nextPadrinho;
+                }
             }
             
             //SalvaMatch(matchesHorario, "Horario");
-            SalvaMatch(matchesMBTI, "MBTI");
+            SalvaMatch(matchesMBTI, "Horario");
             SalvaAlunos(alunos, "Alunos");
+            SalvaPadrinho(padrinhos, "Padrinhos");
 
-            Console.WriteLine("Finalizado");
+            Console.WriteLine("Finalizado \n" +
+                $"Alunos sem match {alunos.Count} e Padrinho sem Match {padrinhos.Count}");
             Console.ReadLine();
         }
 
@@ -121,9 +154,10 @@ namespace demoApadrinhamento
              */
             using (StreamWriter sw = new StreamWriter(Path.Combine(path, $"Match{Name}.csv")))
             {
+                string linha = $"NomeAluno;Turno;Horario;MBTI;NomePadrinho;Ocupacao;Horario;MBTI";
+                sw.WriteLine(linha);
                 foreach (Match m in list)
                 {
-                    string linha;
                     linha = $"{m.afilhado.nome};{m.afilhado.turno};{m.afilhado.horario};{m.afilhado.mbti};";
                     linha += $"{m.padrinho.nome};{m.padrinho.ocupacao};{m.padrinho.horario};{m.padrinho.mbti};";
                     sw.WriteLine(linha);
@@ -136,12 +170,28 @@ namespace demoApadrinhamento
             string path = Config.Saida;
             using (StreamWriter sw = new StreamWriter(Path.Combine(path, $"{Name}SemMatch.csv")))
             {
+                string linha = $"Nome;Turno;Horario;MBTI;";
+                sw.WriteLine(linha);
                 foreach (Aluno m in list)
                 {
-                    string linha;
-                    linha = $"{m.nome};{m.turno};{m.horario};{m.mbti};;;;;";
+                    linha = $"{m.nome};{m.turno};{m.horario};{m.mbti};";
                     sw.WriteLine(linha);
                 }
+            }
+        }
+        static void SalvaPadrinho(LinkedList<Padrinho> list, string Name)
+        {
+            string path = Config.Saida;
+            using (StreamWriter sw = new StreamWriter(Path.Combine(path, $"{Name}SemMatch.csv")))
+            {
+                string linha = $"Nome;Ocupacao;Horario;MBTI;AfilhadosMax;";
+                sw.WriteLine(linha);
+                foreach (Padrinho m in list)
+                {
+                    linha = $"{m.nome};{m.ocupacao};{m.horario};{m.mbti};{m.maxAfilhado.ToString()};";
+                    sw.WriteLine(linha);
+                }
+
             }
 
         }
