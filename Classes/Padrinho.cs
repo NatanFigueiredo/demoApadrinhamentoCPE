@@ -12,6 +12,7 @@ namespace demoApadrinhamento.Classes
         public string mbti { get; set; }
         public string ocupacao { get; set; }
         public string horario { get; set; }
+        public int maxAfilhado { get; set; }
 
         public Padrinho(string nome, string mbti, string ocupacao, string horario)
         {
@@ -19,6 +20,7 @@ namespace demoApadrinhamento.Classes
             this.mbti = mbti;
             this.ocupacao = ocupacao;
             this.horario = horario;
+            this.maxAfilhado = maxAfilhado;
         }
 
         public override string ToString()

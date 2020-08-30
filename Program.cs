@@ -55,31 +55,32 @@ namespace demoApadrinhamento
              * for(LinkedListNode<Object> node=list.First; node != null; node=node.Next){
              */
 
-            LinkedListNode<Aluno> a = alunos.First;
-            while (a != null)
+            LinkedListNode<Padrinho> p = padrinhos.First;
+            while (p != null)
             {
-                bool hasMatch = false;
-                foreach (Padrinho p in padrinhos)
+                int afilhadosAtuais = 0;
+                LinkedListNode<Aluno> a = alunos.First;
+                while ((a != null) & (afilhadosAtuais < p.Value.maxAfilhado))
                 {
-                    if (a.Value.mbti.Equals(p.mbti))
+                    bool hasMatch = false;
+                    if (validaHorario(p.Value.horario, a.Value.horario) && p.Value.mbti.Equals(a.Value.mbti))
                     {
-                        matchesMBTI.AddLast(new Match(a.Value, p));
+                        matchesMBTI.AddLast(new Match(a.Value, p.Value));
                         hasMatch = true;
+                        afilhadosAtuais++;
                     }
 
-                    if (validaHorario(a.Value.horario, p.horario))
-                    {
-                        matchesHorario.AddLast(new Match(a.Value, p));
-                        hasMatch = true;
-                    }
+                    LinkedListNode<Aluno> nextAluno = a.Next;
+                    if (hasMatch) alunos.Remove(a);
+
+                    a = nextAluno;
                 }
 
-                LinkedListNode<Aluno> next = a.Next;
-                if (hasMatch) alunos.Remove(a);
-
-                a = next;
+                LinkedListNode<Padrinho> nextPadrinho = p.Next;
+                if (afilhadosAtuais == p.Value.maxAfilhado) padrinhos.Remove(p);
+                p = nextPadrinho;
             }
-
+            
             //SalvaMatch(matchesHorario, "Horario");
             SalvaMatch(matchesMBTI, "MBTI");
             SalvaAlunos(alunos, "Alunos");
@@ -88,13 +89,29 @@ namespace demoApadrinhamento
             Console.ReadLine();
         }
 
-        static bool validaHorario(string hAluno, string hPadrinho)
+        static bool validaHorario(string hPadrinho, string hAluno)
         {
-            if (((hAluno.Contains("Tarde") || hAluno.Contains("Manhã")) && (hPadrinho.Equals("Ambos") || hPadrinho.Equals("Vespertino"))) ||
-                (hAluno.Contains("Noite") && (hPadrinho.Equals("Ambos") || hPadrinho.Equals("Noturno"))))
+            if (hPadrinho.Equals("Ambos"))
+            {
                 return true;
+            }
+            else if (hPadrinho.Equals("Vespertino"))
+            {
+                if (!hAluno.Contains("Noite"))
+                    return true;
+            }
+            else if (hPadrinho.Equals("Noturno"))
+            {
+                if (hAluno.Contains("Noite"))
+                    return true;
+            }
             return false;
+            //if (((hAluno.Contains("Tarde") || hAluno.Contains("Manhã")) && (hPadrinho.Equals("Ambos") || hPadrinho.Equals("Vespertino"))) ||
+            //    (hAluno.Contains("Noite") && (hPadrinho.Equals("Ambos") || hPadrinho.Equals("Noturno"))))
+            //    return true;
+            //return false;
         }
+
 
         static void SalvaMatch(LinkedList<Match> list, string Name)
         {
