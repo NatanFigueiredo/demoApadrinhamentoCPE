@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Aluno.cs" />
+    <Compile Include="Classes\Config.cs" />
     <Compile Include="Classes\Padrinho.cs" />
     <Compile Include="Classes\Match.cs" />
     <Compile Include="Program.cs" />

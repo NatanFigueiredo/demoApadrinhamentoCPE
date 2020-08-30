@@ -20,5 +20,10 @@ namespace demoApadrinhamento.Classes
             this.ocupacao = ocupacao;
             this.horario = horario;
         }
+
+        public override string ToString()
+        {
+            return nome + ' ' + mbti + ' ' + ocupacao + ' ' + horario;
+        }
     }
 }
