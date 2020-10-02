@@ -139,10 +139,6 @@ namespace demoApadrinhamento
                     return true;
             }
             return false;
-            //if (((hAluno.Contains("Tarde") || hAluno.Contains("Manhã")) && (hPadrinho.Equals("Ambos") || hPadrinho.Equals("Vespertino"))) ||
-            //    (hAluno.Contains("Noite") && (hPadrinho.Equals("Ambos") || hPadrinho.Equals("Noturno"))))
-            //    return true;
-            //return false;
         }
 
 
